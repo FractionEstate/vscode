@@ -58,6 +58,7 @@ import { IReadonlyEditorGroupModel } from '../../../common/editor/editorGroupMod
 import { IHostService } from '../../../services/host/browser/host.js';
 import { BugIndicatingError } from '../../../../base/common/errors.js';
 import { applyDragImage } from '../../../../base/browser/ui/dnd/dnd.js';
+import { IWorkbenchLayoutService } from '../../../services/layout/browser/layoutService.js';
 
 interface IEditorInputLabel {
 	readonly editor: EditorInput;
@@ -152,8 +153,9 @@ export class MultiEditorTabsControl extends EditorTabsControl {
 		@ITreeViewsDnDService private readonly treeViewsDragAndDropService: ITreeViewsDnDService,
 		@IEditorResolverService editorResolverService: IEditorResolverService,
 		@IHostService hostService: IHostService,
+		@IWorkbenchLayoutService layoutService: IWorkbenchLayoutService,
 	) {
-		super(parent, editorPartsView, groupsView, groupView, tabsModel, contextMenuService, instantiationService, contextKeyService, keybindingService, notificationService, quickInputService, themeService, editorResolverService, hostService);
+		super(parent, editorPartsView, groupsView, groupView, tabsModel, contextMenuService, instantiationService, contextKeyService, keybindingService, notificationService, quickInputService, themeService, editorResolverService, hostService, layoutService);
 
 		// Resolve the correct path library for the OS we are on
 		// If we are connected to remote, this accounts for the

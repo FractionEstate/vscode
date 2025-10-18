@@ -28,22 +28,24 @@
 	padding: 5px 12px 6px 20px;
 }
 
-.extensions-viewlet > .header  > .extensions-search-container {
+.extensions-viewlet > .header > .extensions-search-container {
 	position: relative;
 }
 
-.extensions-viewlet > .header  > .extensions-search-container >  .search-box {
+
+.extensions-viewlet > .header > .extensions-search-container > .search-box {
 	width: 100%;
 	height: 28px;
 	line-height: 18px;
 	box-sizing: border-box;
 	padding: 4px;
 	border: 1px solid transparent;
+	appearance: textfield;
 	-webkit-appearance: textfield;
 	-moz-appearance: textfield;
 }
 
-.extensions-viewlet > .header  > .extensions-search-container >  .extensions-search-actions-container {
+.extensions-viewlet > .header > .extensions-search-container > .extensions-search-actions-container {
 	display: flex;
 	align-items: center;
 	position: absolute;
@@ -109,7 +111,7 @@
 	line-height: 22px;
 }
 
-.extensions-viewlet > .extensions .extension-view-header .monaco-action-bar .action-item.disabled  {
+.extensions-viewlet > .extensions .extension-view-header .monaco-action-bar .action-item.disabled {
 	display: none;
 }
 
@@ -158,16 +160,19 @@
 .extensions-viewlet > .extensions .extension-list-item.loading > .icon-container {
 	display: none;
 }
+
 .extensions-viewlet.narrow > .extensions .extension-list-item > .icon-container {
 	display: flex;
 	align-items: flex-start;
 	padding-top: 10px;
 }
+
 .extensions-viewlet.narrow > .extensions .extension-list-item > .icon-container > .extension-icon .icon {
 	width: 24px;
 	height: 24px;
 	padding-right: 8px;
 }
+
 .extensions-viewlet.narrow > .extensions .extension-list-item > .icon-container > .extension-icon .codicon {
 	font-size: 24px !important;
 	padding-right: 8px;
@@ -201,4 +206,33 @@
 
 .extensions-viewlet .codicon-info::before {
 	color: var(--vscode-editorInfo-foreground);
+}
+
+.monaco-workbench.mobile .extensions-viewlet {
+	padding: var(--vscode-mobile-section-gap, 12px) 0 calc(var(--vscode-mobile-section-gap, 12px) + var(--vscode-mobile-safe-area-bottom, 0px));
+}
+
+.monaco-workbench.mobile .extensions-viewlet > .header {
+	height: auto;
+	padding: 0 var(--vscode-mobile-horizontal-padding, 12px) var(--vscode-mobile-section-gap, 12px);
+}
+
+.monaco-workbench.mobile .extensions-viewlet > .header > .extensions-search-container > .search-box {
+	height: var(--vscode-mobile-touch-target, 44px);
+	line-height: calc(var(--vscode-mobile-touch-target, 44px) - 10px);
+	padding: 0 var(--vscode-mobile-horizontal-padding, 12px);
+}
+
+.monaco-workbench.mobile .extensions-viewlet > .header > .extensions-search-container > .extensions-search-actions-container {
+	height: var(--vscode-mobile-touch-target, 44px);
+}
+
+.monaco-workbench.mobile .extensions-viewlet > .extensions {
+	height: auto;
+	padding: 0 var(--vscode-mobile-horizontal-padding, 12px);
+}
+
+.monaco-workbench.mobile .extensions-viewlet > .extensions .monaco-list-row {
+	min-height: var(--vscode-mobile-touch-target, 44px);
+	align-items: center;
 }

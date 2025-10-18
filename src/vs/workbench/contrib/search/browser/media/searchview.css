@@ -206,7 +206,7 @@
 
 .search-view .message .keyword-refresh:hover,
 .search-view .message .keyword-refresh:active {
-	color:  var(--vscode-textLink-activeForeground);
+	color: var(--vscode-textLink-activeForeground);
 }
 
 
@@ -327,6 +327,52 @@
 .monaco-workbench.hc-black .search-view .monaco-list .monaco-list-row .monaco-action-bar .action-label,
 .monaco-workbench.hc-light .search-view .monaco-list .monaco-list-row .monaco-action-bar .action-label {
 	margin-top: 2px;
+}
+
+.monaco-workbench.mobile .search-view {
+	gap: var(--vscode-mobile-section-gap, 12px);
+	padding: var(--vscode-mobile-section-gap, 12px) var(--vscode-mobile-horizontal-padding, 12px) var(--vscode-mobile-section-gap, 12px);
+}
+
+.monaco-workbench.mobile .search-view .search-widgets-container {
+	margin: 0;
+	padding: 0;
+	gap: var(--vscode-mobile-section-gap, 12px);
+}
+
+.monaco-workbench.mobile .search-view .search-widget .monaco-inputbox > .ibwrapper > textarea.input {
+	min-height: var(--vscode-mobile-touch-target, 44px);
+	padding: 10px var(--vscode-mobile-horizontal-padding, 12px);
+}
+
+.monaco-workbench.mobile .search-view .search-widget .replace-container {
+	margin-top: var(--vscode-mobile-section-gap, 12px);
+}
+
+.monaco-workbench.mobile .search-view .search-widget .replace-container .monaco-action-bar {
+	height: var(--vscode-mobile-touch-target, 44px);
+}
+
+.monaco-workbench.mobile .search-view .query-details {
+	margin: 0;
+	padding: 0 var(--vscode-mobile-horizontal-padding, 12px);
+}
+
+.monaco-workbench.mobile .search-view .message {
+	padding: 0 var(--vscode-mobile-horizontal-padding, 12px) var(--vscode-mobile-section-gap, 12px);
+}
+
+.monaco-workbench.mobile .search-view .message.ai-keywords {
+	margin: 0 var(--vscode-mobile-horizontal-padding, 12px) var(--vscode-mobile-section-gap, 12px);
+}
+
+.monaco-workbench.mobile .search-view .monaco-list .monaco-list-row {
+	min-height: var(--vscode-mobile-touch-target, 44px);
+	align-items: center;
+}
+
+.monaco-workbench.mobile .search-view .monaco-list .monaco-list-row .monaco-action-bar .action-label {
+	padding: 6px;
 }
 
 .search-view .monaco-count-badge {

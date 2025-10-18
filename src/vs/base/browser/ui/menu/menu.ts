@@ -103,6 +103,8 @@ export class Menu extends ActionBar {
 	protected styleSheet: HTMLStyleElement | undefined;
 
 	constructor(container: HTMLElement, actions: ReadonlyArray<IAction>, options: IMenuOptions, private readonly menuStyles: IMenuStyles) {
+		const isMobileWorkbench = !!container.closest('.monaco-workbench.mobile');
+
 		container.classList.add('monaco-menu-container');
 		container.setAttribute('role', 'presentation');
 		const menuElement = document.createElement('div');
@@ -252,7 +254,7 @@ export class Menu extends ActionBar {
 		const scrollElement = this.scrollableElement.getDomNode();
 		scrollElement.style.position = '';
 
-		this.styleScrollElement(scrollElement, menuStyles);
+		this.styleScrollElement(scrollElement, menuStyles, isMobileWorkbench);
 
 		// Support scroll on menu drag
 		this._register(addDisposableListener(menuElement, TouchEventType.Change, e => {
@@ -269,7 +271,8 @@ export class Menu extends ActionBar {
 		}));
 
 		const window = getWindow(container);
-		menuElement.style.maxHeight = `${Math.max(10, window.innerHeight - container.getBoundingClientRect().top - 35)}px`;
+		const maxHeightPadding = isMobileWorkbench ? 24 : 35;
+		menuElement.style.maxHeight = `${Math.max(10, window.innerHeight - container.getBoundingClientRect().top - maxHeightPadding)}px`;
 
 		actions = actions.filter((a, idx) => {
 			if (options.submenuIds?.has(a.id)) {
@@ -316,13 +319,13 @@ export class Menu extends ActionBar {
 		this.styleSheet.textContent = getMenuWidgetCSS(style, isInShadowDOM(container));
 	}
 
-	private styleScrollElement(scrollElement: HTMLElement, style: IMenuStyles): void {
+	private styleScrollElement(scrollElement: HTMLElement, style: IMenuStyles, isMobileWorkbench: boolean): void {
 
 		const fgColor = style.foregroundColor ?? '';
 		const bgColor = style.backgroundColor ?? '';
 		const border = style.borderColor ? `1px solid ${style.borderColor}` : '';
-		const borderRadius = '5px';
-		const shadow = style.shadowColor ? `0 2px 8px ${style.shadowColor}` : '';
+		const borderRadius = isMobileWorkbench ? 'var(--vscode-mobile-overlay-radius, 12px)' : '5px';
+		const shadow = style.shadowColor ? (isMobileWorkbench ? `0 12px 30px ${style.shadowColor}` : `0 2px 8px ${style.shadowColor}`) : '';
 
 		scrollElement.style.outline = border;
 		scrollElement.style.borderRadius = borderRadius;
@@ -1316,6 +1319,74 @@ ${formatRule(Codicon.menuSubmenu)}
 
 .monaco-menu .action-item {
 	cursor: default;
+}
+
+
+.monaco-workbench.mobile .context-view.monaco-menu-container {
+	max-width: calc(
+		100vw
+		- var(--vscode-mobile-horizontal-padding, 12px)
+		- var(--vscode-mobile-horizontal-padding, 12px)
+	);
+	padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.monaco-workbench.mobile .context-view.monaco-menu-container .monaco-scrollable-element {
+	border-radius: var(--vscode-mobile-overlay-radius, 12px);
+	max-height: calc(
+		100vh
+		- env(safe-area-inset-top, 0px)
+		- env(safe-area-inset-bottom, 0px)
+		- var(--vscode-mobile-section-gap, 12px)
+		- var(--vscode-mobile-section-gap, 12px)
+	);
+}
+
+.monaco-workbench.mobile .context-view.monaco-menu-container .monaco-menu {
+	font-size: 14px;
+	line-height: 1.6;
+	min-width: 0;
+	width: 100%;
+	border-radius: var(--vscode-mobile-overlay-radius, 12px);
+	box-shadow: var(--vscode-mobile-overlay-shadow, 0 12px 30px rgba(0, 0, 0, 0.35));
+}
+
+.monaco-workbench.mobile .monaco-menu .monaco-action-bar.vertical {
+	padding: var(--vscode-mobile-section-gap, 12px) 0;
+}
+
+
+.monaco-workbench.mobile .monaco-menu .monaco-action-bar.vertical .action-menu-item {
+	margin: 0 var(--vscode-mobile-horizontal-padding, 12px);
+	min-height: var(--vscode-mobile-touch-target, 44px);
+	height: auto;
+	border-radius: calc(var(--vscode-mobile-overlay-radius, 12px) - 4px);
+	gap: var(--vscode-mobile-section-gap, 12px);
+}
+
+.monaco-workbench.mobile .monaco-menu .monaco-action-bar.vertical .action-label,
+.monaco-workbench.mobile .monaco-menu .monaco-action-bar.vertical .submenu-indicator {
+	font-size: 14px;
+	padding: 0;
+}
+
+.monaco-workbench.mobile .monaco-menu .monaco-action-bar.vertical .submenu-indicator {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+}
+
+.monaco-workbench.mobile .monaco-menu .monaco-action-bar.vertical .submenu-indicator.codicon::before {
+	margin-right: 0;
+}
+
+.monaco-workbench.mobile .monaco-menu .monaco-action-bar.vertical .keybinding {
+	display: none;
+}
+
+.monaco-workbench.mobile .monaco-menu .monaco-action-bar.vertical .action-label.separator {
+	margin: var(--vscode-mobile-section-gap, 12px) 0 !important;
+	padding: 0 var(--vscode-mobile-horizontal-padding, 12px);
 }`;
 
 	if (isForShadowDom) {

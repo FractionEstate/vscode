@@ -6,15 +6,31 @@
 .monaco-workbench > .notifications-center {
 	position: absolute;
 	z-index: 1000;
-	right: 7px; /* attempt to position at same location as a toast */
-	bottom: 29px; /* 22px status bar height + 7px (attempt to position at same location as a toast) */
+	right: 7px;
+	/* attempt to position at same location as a toast */
+	bottom: 29px;
+	/* 22px status bar height + 7px (attempt to position at same location as a toast) */
 	display: none;
 	overflow: hidden;
 	border-radius: 4px;
 }
 
+.monaco-workbench.mobile > .notifications-center {
+	left: var(--vscode-mobile-horizontal-padding, 12px);
+	right: var(--vscode-mobile-horizontal-padding, 12px);
+	bottom: calc(var(--vscode-mobile-nav-height, 56px) + var(--vscode-mobile-safe-area-bottom, 0px) + 12px);
+	max-height: 70vh;
+	border-radius: var(--vscode-mobile-overlay-radius, 12px);
+	box-shadow: var(--vscode-mobile-overlay-shadow, 0 12px 30px rgba(0, 0, 0, 0.35));
+}
+
 .monaco-workbench.nostatusbar > .notifications-center {
-	bottom: 11px; /* attempt to position at same location as a toast */
+	bottom: 11px;
+	/* attempt to position at same location as a toast */
+}
+
+.monaco-workbench.mobile.nostatusbar > .notifications-center {
+	bottom: calc(var(--vscode-mobile-safe-area-bottom, 0px) + 12px);
 }
 
 .monaco-workbench > .notifications-center.visible {
@@ -31,9 +47,18 @@
 	height: 35px;
 }
 
+.monaco-workbench.mobile > .notifications-center > .notifications-center-header {
+	padding: 12px var(--vscode-mobile-horizontal-padding, 12px);
+	height: auto;
+}
+
 .monaco-workbench > .notifications-center > .notifications-center-header > .notifications-center-header-title {
 	text-transform: uppercase;
 	font-size: 11px;
+}
+
+.monaco-workbench.mobile > .notifications-center > .notifications-center-header > .notifications-center-header-title {
+	font-size: 13px;
 }
 
 .monaco-workbench > .notifications-center > .notifications-center-header > .notifications-center-header-toolbar {
@@ -49,7 +74,12 @@
 }
 
 .monaco-workbench > .notifications-center .notifications-list-container .monaco-list-row:last-child {
-	border-radius: 0px 0px 4px 4px; /* adopt the border radius at the end of the notifications center */
+	border-radius: 0px 0px 4px 4px;
+	/* adopt the border radius at the end of the notifications center */
+}
+
+.monaco-workbench.mobile > .notifications-center .notifications-list-container .monaco-list-row:last-child {
+	border-radius: 0px 0px var(--vscode-mobile-overlay-radius, 12px) var(--vscode-mobile-overlay-radius, 12px);
 }
 
 /* Icons */

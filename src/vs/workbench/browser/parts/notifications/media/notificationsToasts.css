@@ -7,13 +7,25 @@
 	position: absolute;
 	z-index: 1000;
 	right: 3px;
-	bottom: 25px; /* 22px status bar height + 3px */
+	bottom: 25px;
+	/* 22px status bar height + 3px */
 	display: none;
 	overflow: hidden;
 }
 
+.monaco-workbench.mobile > .notifications-toasts {
+	left: var(--vscode-mobile-horizontal-padding, 12px);
+	right: var(--vscode-mobile-horizontal-padding, 12px);
+	bottom: calc(var(--vscode-mobile-nav-height, 56px) + var(--vscode-mobile-safe-area-bottom, 0px) + 8px);
+	gap: var(--vscode-mobile-section-gap, 12px);
+}
+
 .monaco-workbench.nostatusbar > .notifications-toasts {
 	bottom: 3px;
+}
+
+.monaco-workbench.mobile.nostatusbar > .notifications-toasts {
+	bottom: calc(var(--vscode-mobile-safe-area-bottom, 0px) + 12px);
 }
 
 .monaco-workbench > .notifications-toasts.visible {
@@ -22,14 +34,22 @@
 }
 
 .monaco-workbench > .notifications-toasts .notification-toast-container {
-	overflow: hidden; /* this ensures that the notification toast does not shine through */
+	overflow: hidden;
+	/* this ensures that the notification toast does not shine through */
+}
+
+.monaco-workbench.mobile > .notifications-toasts .notification-toast-container {
+	width: 100%;
 }
 
 .monaco-workbench > .notifications-toasts .notification-toast-container > .notification-toast {
-	margin: 4px; /* enables separation and drop shadows around toasts */
-	transform: translate3d(0px, 100%, 0px); /* move the notification 50px to the bottom (to prevent bleed through) */
-	opacity: 0; /*  fade the toast in */
-	transition:	transform 300ms ease-out, opacity 300ms ease-out;
+	margin: 4px;
+	/* enables separation and drop shadows around toasts */
+	transform: translate3d(0px, 100%, 0px);
+	/* move the notification 50px to the bottom (to prevent bleed through) */
+	opacity: 0;
+	/*  fade the toast in */
+	transition: transform 300ms ease-out, opacity 300ms ease-out;
 }
 
 .monaco-workbench > .notifications-toasts .notifications-list-container,
@@ -38,6 +58,19 @@
 .monaco-workbench > .notifications-toasts .notification-toast-container > .notification-toast .monaco-list:not(.element-focused):focus:before,
 .monaco-workbench > .notifications-toasts .notification-toast-container > .notification-toast .monaco-list-row {
 	border-radius: 4px;
+}
+
+.monaco-workbench.mobile > .notifications-toasts .notification-toast-container > .notification-toast {
+	margin: 0;
+	width: 100%;
+}
+
+.monaco-workbench.mobile > .notifications-toasts .notifications-list-container,
+.monaco-workbench.mobile > .notifications-toasts .notification-toast-container > .notification-toast,
+.monaco-workbench.mobile > .notifications-toasts .notification-toast-container > .notification-toast .monaco-scrollable-element,
+.monaco-workbench.mobile > .notifications-toasts .notification-toast-container > .notification-toast .monaco-list:not(.element-focused):focus:before,
+.monaco-workbench.mobile > .notifications-toasts .notification-toast-container > .notification-toast .monaco-list-row {
+	border-radius: var(--vscode-mobile-overlay-radius, 12px);
 }
 
 .monaco-workbench.monaco-reduce-motion > .notifications-toasts .notification-toast-container > .notification-toast {

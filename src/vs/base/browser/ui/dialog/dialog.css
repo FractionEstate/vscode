@@ -10,7 +10,8 @@
 	width: 100%;
 	left: 0;
 	top: 0;
-	z-index: 2575; /* Above Context Views, Below Workbench Hover */
+	z-index: 2575;
+	/* Above Context Views, Below Workbench Hover */
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -34,7 +35,8 @@
 }
 
 .monaco-dialog-box.align-vertical {
-	min-width: 350px; /* more narrow when aligned vertically */
+	min-width: 350px;
+	/* more narrow when aligned vertically */
 }
 
 /** Dialog: Title Actions Row */
@@ -85,7 +87,8 @@
 	text-overflow: ellipsis;
 	user-select: text;
 	-webkit-user-select: text;
-	word-wrap: break-word; /* never overflow long words, but break to next line */
+	word-wrap: break-word;
+	/* never overflow long words, but break to next line */
 	white-space: normal;
 }
 
@@ -106,17 +109,21 @@
 
 .monaco-dialog-box .dialog-message-row .dialog-message-container ul,
 .monaco-dialog-box .dialog-footer-row ul {
-	padding-inline-start: 20px; /* reduce excessive indent of list items in the dialog */
+	padding-inline-start: 20px;
+	/* reduce excessive indent of list items in the dialog */
 }
 
 /** Dialog: Message */
 .monaco-dialog-box .dialog-message-row .dialog-message-container .dialog-message {
 	line-height: 22px;
 	font-size: 18px;
-	flex: 1; /* let the message always grow */
+	flex: 1;
+	/* let the message always grow */
 	white-space: normal;
-	word-wrap: break-word; /* never overflow long words, but break to next line */
-	min-height: 48px; /* matches icon height */
+	word-wrap: break-word;
+	/* never overflow long words, but break to next line */
+	min-height: 48px;
+	/* matches icon height */
 	margin-bottom: 8px;
 	display: flex;
 	align-items: center;
@@ -125,7 +132,8 @@
 /** Dialog: Details */
 .monaco-dialog-box .dialog-message-row .dialog-message-container .dialog-message-detail {
 	line-height: 22px;
-	flex: 1; /* let the message always grow */
+	flex: 1;
+	/* let the message always grow */
 }
 
 .monaco-dialog-box .dialog-message-row .dialog-message-container .dialog-message a:focus {
@@ -166,7 +174,8 @@
 	display: flex;
 	align-items: center;
 	padding-right: 1px;
-	overflow: hidden; /* buttons row should never overflow */
+	overflow: hidden;
+	/* buttons row should never overflow */
 }
 
 .monaco-dialog-box > .dialog-buttons-row {
@@ -184,7 +193,8 @@
 .monaco-dialog-box:not(.align-vertical) > .dialog-buttons-row > .dialog-buttons {
 	overflow: hidden;
 	justify-content: flex-end;
-	margin-left: 67px; /* for long buttons, force align with text */
+	margin-left: 67px;
+	/* for long buttons, force align with text */
 }
 
 .monaco-dialog-box.align-vertical > .dialog-buttons-row > .dialog-buttons {
@@ -197,12 +207,14 @@
 	padding: 4px 10px;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	margin: 4px 5px; /* allows button focus outline to be visible */
+	margin: 4px 5px;
+	/* allows button focus outline to be visible */
 	outline-offset: 2px !important;
 }
 
 .monaco-dialog-box.align-vertical > .dialog-buttons-row > .dialog-buttons > .monaco-button {
-	margin: 4px 0; /* allows button focus outline to be visible */
+	margin: 4px 0;
+	/* allows button focus outline to be visible */
 }
 
 .monaco-dialog-box:not(.align-vertical) > .dialog-buttons-row > .dialog-buttons > .monaco-button {
@@ -243,4 +255,53 @@
 .monaco-dialog-box > .dialog-buttons-row > .dialog-buttons > .monaco-button-dropdown > .monaco-dropdown-button {
 	padding-left: 5px;
 	padding-right: 5px;
+}
+
+.monaco-dialog-modal-block.mobile {
+	align-items: flex-end;
+	padding: 0 var(--vscode-mobile-horizontal-padding, 12px) calc(var(--vscode-mobile-horizontal-padding, 12px) + var(--vscode-mobile-safe-area-bottom, 0px));
+}
+
+.monaco-dialog-modal-block.mobile .dialog-shadow {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+}
+
+.monaco-dialog-box.mobile {
+	min-width: auto;
+	width: min(var(--vscode-mobile-dialog-max-width, 520px), 100%);
+	max-width: 100%;
+	border-radius: var(--vscode-mobile-overlay-radius, 12px);
+	padding: 16px;
+	box-sizing: border-box;
+}
+
+.monaco-dialog-box.mobile.align-vertical {
+	min-width: auto;
+}
+
+.monaco-dialog-box.mobile .dialog-message-row,
+.monaco-dialog-box.mobile .dialog-footer-row {
+	padding: 0 var(--vscode-mobile-horizontal-padding, 12px);
+}
+
+.monaco-dialog-box.mobile > .dialog-buttons-row {
+	padding: 16px var(--vscode-mobile-horizontal-padding, 12px) 0;
+}
+
+.monaco-dialog-box.mobile > .dialog-buttons-row > .dialog-buttons {
+	margin-left: 0;
+	margin-right: 0;
+	flex-direction: column;
+	align-items: stretch;
+	gap: 8px;
+}
+
+.monaco-dialog-box.mobile > .dialog-buttons-row > .dialog-buttons > .monaco-button,
+.monaco-dialog-box.mobile > .dialog-buttons-row > .dialog-buttons > .monaco-button-dropdown,
+.monaco-dialog-box.mobile > .dialog-buttons-row > .dialog-buttons > .monaco-button-dropdown > .monaco-text-button,
+.monaco-dialog-box.mobile > .dialog-buttons-row > .dialog-buttons > .monaco-button-dropdown > .monaco-dropdown-button {
+	height: var(--vscode-mobile-touch-target, 44px);
+	min-height: var(--vscode-mobile-touch-target, 44px);
 }

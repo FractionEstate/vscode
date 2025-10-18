@@ -42,7 +42,8 @@
 	align-items: center;
 	white-space: pre;
 
-	height: 21px; /* Editor outline is -1px in, don't overlap */
+	height: 21px;
+	/* Editor outline is -1px in, don't overlap */
 	margin: 0px 3px;
 	padding: 0px 3px;
 	overflow: hidden;
@@ -59,7 +60,8 @@
 
 .monaco-workbench .notebookOverlay .cell-statusbar-container .codicon {
 	font-size: 14px;
-	color: unset; /* Inherit from parent cell-status-item */
+	color: unset;
+	/* Inherit from parent cell-status-item */
 }
 
 .monaco-workbench .notebookOverlay .cell-statusbar-container .cell-status-item-show-when-active {
@@ -74,6 +76,27 @@
 .monaco-workbench .notebookOverlay .monaco-list .monaco-list-row .cell-statusbar-container .cell-status-item .codicon-notebook-state-success {
 	color: var(--vscode-notebookStatusSuccessIcon-foreground);
 }
+
 .monaco-workbench .notebookOverlay .monaco-list .monaco-list-row .cell-statusbar-container .cell-status-item .codicon-notebook-state-error {
 	color: var(--vscode-notebookStatusErrorIcon-foreground);
+}
+
+/** Mobile */
+.monaco-workbench.mobile .notebookOverlay .cell-statusbar-container {
+	min-height: var(--vscode-mobile-touch-target, 44px);
+	height: auto;
+	padding: 0 var(--vscode-mobile-horizontal-padding, 12px);
+	gap: var(--vscode-mobile-section-gap, 12px);
+	align-items: center;
+}
+
+.monaco-workbench.mobile .notebookOverlay .cell-statusbar-container .cell-status-item {
+	height: auto;
+	margin: 0;
+	padding: 0 8px;
+}
+
+.monaco-workbench.mobile .notebookOverlay .cell-statusbar-container .cell-status-left > .cell-contributed-items {
+	margin-left: 0;
+	gap: var(--vscode-mobile-section-gap, 12px);
 }

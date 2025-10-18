@@ -631,6 +631,7 @@ export class TestLayoutService implements IWorkbenchLayoutService {
 	activeContainer: HTMLElement = mainWindow.document.body;
 
 	readonly onDidChangeZenMode: Event<boolean> = Event.None;
+	readonly onDidChangeMobileLayoutMode: Event<boolean> = Event.None;
 	readonly onDidChangeMainEditorCenteredLayout: Event<boolean> = Event.None;
 	readonly onDidChangeWindowMaximized: Event<{ windowId: number; maximized: boolean }> = Event.None;
 	readonly onDidChangePanelPosition: Event<string> = Event.None;
@@ -658,6 +659,7 @@ export class TestLayoutService implements IWorkbenchLayoutService {
 	isTitleBarHidden(): boolean { return false; }
 	isStatusBarHidden(): boolean { return false; }
 	isActivityBarHidden(): boolean { return false; }
+	isMobileLayoutActive(): boolean { return false; }
 	setActivityBarHidden(_hidden: boolean): void { }
 	setBannerHidden(_hidden: boolean): void { }
 	isSideBarHidden(): boolean { return false; }
