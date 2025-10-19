@@ -61,6 +61,7 @@ module.exports.unicodeFilter = [
 	'!extensions/**/snippets/**',
 	'!extensions/**/colorize-fixtures/**',
 	'!extensions/terminal-suggest/src/shell/fishBuiltinsCache.ts',
+	'!extensions/mermaid-chat-features/chat-webview-out/**',
 
 	'!src/vs/base/browser/dompurify/**',
 	'!src/vs/workbench/services/keybinding/browser/keyboardLayouts/**',
@@ -120,6 +121,7 @@ module.exports.indentationFilter = [
 	'!**/lib/**',
 	'!extensions/**/dist/**',
 	'!extensions/**/out/**',
+	'!extensions/mermaid-chat-features/chat-webview-out/**',
 	'!extensions/**/snippets/**',
 	'!extensions/**/syntaxes/**',
 	'!extensions/**/themes/**',
@@ -187,6 +189,7 @@ module.exports.copyrightFilter = [
 	'!extensions/html-language-features/server/src/modes/typescript/*',
 	'!extensions/*/server/bin/*',
 	'!src/vs/workbench/contrib/terminal/common/scripts/psreadline/**',
+	'!extensions/mermaid-chat-features/chat-webview-out/**',
 ];
 
 module.exports.tsFormattingFilter = [

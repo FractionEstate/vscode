@@ -481,9 +481,6 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 	private handleContainerDidLayout(container: HTMLElement, dimension: IDimension): void {
 		if (container === this.mainContainer) {
 			this.updateMobileLayoutMode(dimension);
-		}
-
-		if (container === this.mainContainer) {
 			this._onDidLayoutMainContainer.fire(dimension);
 		}
 
