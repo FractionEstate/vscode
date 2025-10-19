@@ -24,7 +24,8 @@
 
 .monaco-workbench .part > .title,
 .monaco-workbench .part > .header-or-footer {
-	display: none; /* Parts have to opt in to show area */
+	display: none;
+	/* Parts have to opt in to show area */
 }
 
 .monaco-workbench .part > .title,
@@ -92,6 +93,19 @@
 .monaco-workbench .part.editor > .content .editor-group-container > .monaco-progress-container {
 	position: absolute;
 	left: 0;
-	top: 33px; /* at the bottom of the 35px height title container */
-	z-index: 5; /* on top of things */
+	top: 33px;
+	/* at the bottom of the 35px height title container */
+	z-index: 5;
+	/* on top of things */
+}
+
+.monaco-workbench.mobile .part > .title,
+.monaco-workbench.mobile .part > .header-or-footer {
+	height: 32px;
+	padding-left: var(--vscode-mobile-horizontal-padding, 6px);
+	padding-right: var(--vscode-mobile-horizontal-padding, 6px);
+}
+
+.monaco-workbench.mobile .part > .title > .title-label h2 {
+	font-size: 13px;
 }

@@ -1,0 +1,36 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.monaco-workbench.mobile {
+	--vscode-mobile-nav-height: 56px;
+	--vscode-mobile-horizontal-padding: 12px;
+	--vscode-mobile-section-gap: 12px;
+	--vscode-mobile-touch-target: 44px;
+	--vscode-mobile-dialog-max-width: 520px;
+	--vscode-mobile-safe-area-top: env(safe-area-inset-top, 0px);
+	--vscode-mobile-safe-area-right: env(safe-area-inset-right, 0px);
+	--vscode-mobile-safe-area-bottom: env(safe-area-inset-bottom, 0px);
+	--vscode-mobile-safe-area-left: env(safe-area-inset-left, 0px);
+	--vscode-mobile-overlay-radius: 12px;
+	--vscode-mobile-overlay-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+	touch-action: pan-y;
+	overflow: auto;
+	overscroll-behavior: contain;
+	font-size: 13px;
+	line-height: 1.6em;
+	padding-bottom: var(--vscode-mobile-safe-area-bottom, 0px);
+	scroll-padding-top: var(--vscode-mobile-safe-area-top, 0px);
+	scroll-padding-bottom: var(--vscode-mobile-safe-area-bottom, 0px);
+	scroll-behavior: smooth;
+}
+
+.monaco-workbench.mobile .monaco-scrollable-element {
+	-webkit-overflow-scrolling: touch;
+	scroll-behavior: smooth;
+}
+
+.monaco-workbench.mobile .monaco-sash {
+	touch-action: none;
+}

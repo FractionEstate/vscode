@@ -14,7 +14,8 @@
 }
 
 .monaco-workbench.nomaineditorarea .part.panel.bottom .composite.title {
-	border-top-width: 0; /* no border when main editor area is hiden */
+	border-top-width: 0;
+	/* no border when main editor area is hiden */
 }
 
 .monaco-workbench .part.panel.top {
@@ -23,7 +24,8 @@
 }
 
 .monaco-workbench.nomaineditorarea .part.panel.top {
-	border-bottom-width: 0; /* no border when main editor area is hiden */
+	border-bottom-width: 0;
+	/* no border when main editor area is hiden */
 }
 
 .monaco-workbench .part.panel.right {
@@ -32,7 +34,8 @@
 }
 
 .monaco-workbench.nomaineditorarea .part.panel.right {
-	border-left-width: 0; /* no border when main editor area is hiden */
+	border-left-width: 0;
+	/* no border when main editor area is hiden */
 }
 
 .monaco-workbench .part.panel.left {
@@ -41,7 +44,8 @@
 }
 
 .monaco-workbench.nomaineditorarea .part.panel.left {
-	border-right-width: 0; /* no border when main editor area is hiden */
+	border-right-width: 0;
+	/* no border when main editor area is hiden */
 }
 
 .monaco-workbench .part.panel > .content .monaco-editor,
@@ -62,8 +66,8 @@
 	border-top-color: var(--vscode-panelTitle-activeBorder) !important;
 }
 
-.monaco-workbench .part.panel > .title > .composite-bar-container >.composite-bar > .monaco-action-bar .action-item:focus .action-label,
-.monaco-workbench .part.panel > .title > .composite-bar-container >.composite-bar > .monaco-action-bar .action-item:hover .action-label {
+.monaco-workbench .part.panel > .title > .composite-bar-container > .composite-bar > .monaco-action-bar .action-item:focus .action-label,
+.monaco-workbench .part.panel > .title > .composite-bar-container > .composite-bar > .monaco-action-bar .action-item:hover .action-label {
 	color: var(--vscode-panelTitle-activeForeground) !important;
 }
 
@@ -71,7 +75,7 @@
 	border-color: var(--vscode-panelInput-border, transparent) !important;
 }
 
-.monaco-workbench .part.panel > .title > .composite-bar-container >.composite-bar > .monaco-action-bar .action-item:focus {
+.monaco-workbench .part.panel > .title > .composite-bar-container > .composite-bar > .monaco-action-bar .action-item:focus {
 	outline: none;
 }
 
@@ -97,4 +101,19 @@
 .monaco-workbench .part.basepanel.top .global-actions .codicon-panel-restore::before {
 	display: inline-block;
 	transform: rotate(180deg);
+}
+
+.monaco-workbench.mobile .part.panel {
+	width: 100% !important;
+	max-width: none;
+	max-height: 45vh;
+	overflow: auto;
+	border-top: 1px solid var(--vscode-panel-border, transparent);
+	padding-bottom: var(--vscode-mobile-safe-area-bottom, 0px);
+}
+
+.monaco-workbench.mobile .part.panel > .title {
+	height: 32px;
+	padding-left: var(--vscode-mobile-horizontal-padding, 8px);
+	padding-right: var(--vscode-mobile-horizontal-padding, 8px);
 }

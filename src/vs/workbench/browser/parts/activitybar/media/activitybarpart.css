@@ -45,11 +45,64 @@
 }
 
 .monaco-workbench .activitybar .action-item:focus {
-	outline: 0 !important; /* activity bar indicates focus custom */
+	outline: 0 !important;
+	/* activity bar indicates focus custom */
 }
 
 .monaco-workbench .activitybar > .content > .composite-bar {
 	margin-bottom: auto;
+}
+
+.monaco-workbench.mobile .part.activitybar {
+	width: 100%;
+	height: var(--vscode-mobile-nav-height, 56px);
+	border-top: 1px solid var(--vscode-sideBar-border, transparent);
+}
+
+.monaco-workbench.mobile .activitybar > .content {
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0 var(--vscode-mobile-horizontal-padding, 12px);
+	gap: var(--vscode-mobile-section-gap, 12px);
+}
+
+.monaco-workbench.mobile .activitybar > .content > .composite-bar {
+	margin-bottom: 0;
+	width: 100%;
+}
+
+.monaco-workbench.mobile .activitybar > .content :not(.monaco-menu) > .monaco-action-bar {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	gap: var(--vscode-mobile-section-gap, 12px);
+	width: 100%;
+}
+
+.monaco-workbench.mobile .activitybar > .content :not(.monaco-menu) > .monaco-action-bar .action-item {
+	width: auto;
+}
+
+.monaco-workbench.mobile .activitybar > .content :not(.monaco-menu) > .monaco-action-bar .action-label {
+	width: var(--vscode-mobile-touch-target, 44px);
+	height: var(--vscode-mobile-touch-target, 44px);
+	margin: 0;
+}
+
+.monaco-workbench.mobile .activitybar > .content :not(.monaco-menu) > .monaco-action-bar .action-item::before,
+.monaco-workbench.mobile .activitybar > .content :not(.monaco-menu) > .monaco-action-bar .action-item::after {
+	width: var(--vscode-mobile-touch-target, 44px);
+}
+
+.monaco-workbench.mobile .activitybar > .content :not(.monaco-menu) > .monaco-action-bar .badge .badge-content,
+.monaco-workbench.mobile .activitybar > .content :not(.monaco-menu) > .monaco-action-bar .profile-badge .profile-text-overlay {
+	top: calc(var(--vscode-mobile-touch-target, 44px) / 2);
+}
+
+.monaco-workbench.mobile .activitybar .menubar {
+	display: none;
 }
 
 /** Menu Bar */

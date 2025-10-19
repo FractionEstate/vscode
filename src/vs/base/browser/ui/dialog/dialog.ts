@@ -129,6 +129,19 @@ export class Dialog extends Disposable {
 		this.element.tabIndex = -1;
 		hide(this.element);
 
+		const workbench = this.container.closest('.monaco-workbench');
+		const applyMobileState = () => {
+			const isMobile = workbench?.classList.contains('mobile') ?? false;
+			this.modalElement?.classList.toggle('mobile', isMobile);
+			this.element.classList.toggle('mobile', isMobile);
+		};
+		applyMobileState();
+		if (workbench) {
+			const observer = new MutationObserver(applyMobileState);
+			observer.observe(workbench, { attributes: true, attributeFilter: ['class'] });
+			this._register({ dispose: () => observer.disconnect() });
+		}
+
 		// Footer
 		if (this.options.renderFooter) {
 			this.footerContainer = this.element.appendChild($('.dialog-footer-row'));

@@ -73,7 +73,8 @@
 		margin-right: 0.8em;
 	}
 
-	&:hover, &.focused {
+	&:hover,
+	&.focused {
 		.monaco-action-bar {
 			display: initial;
 		}
@@ -355,6 +356,44 @@
 	align-items: center;
 }
 
+.monaco-workbench.mobile .test-explorer {
+	gap: var(--vscode-mobile-section-gap, 12px);
+	padding: var(--vscode-mobile-section-gap, 12px) var(--vscode-mobile-horizontal-padding, 12px) var(--vscode-mobile-section-gap, 12px);
+}
+
+.monaco-workbench.mobile .test-explorer .result-summary-container {
+	padding: 0 var(--vscode-mobile-horizontal-padding, 12px) var(--vscode-mobile-section-gap, 12px);
+	height: auto;
+}
+
+.monaco-workbench.mobile .test-explorer .monaco-list-row,
+.monaco-workbench.mobile .test-explorer .testing-stdtree-container {
+	min-height: var(--vscode-mobile-touch-target, 44px);
+	line-height: var(--vscode-mobile-touch-target, 44px);
+}
+
+.monaco-workbench.mobile .testing-stdtree-container .monaco-action-bar {
+	margin-right: var(--vscode-mobile-section-gap, 12px);
+}
+
+.monaco-workbench.mobile .testing-filter-action-bar {
+	margin: 0 var(--vscode-mobile-horizontal-padding, 12px) var(--vscode-mobile-section-gap, 12px);
+	gap: var(--vscode-mobile-section-gap, 12px);
+}
+
+.monaco-workbench.mobile .testing-filter-action-item {
+	min-height: var(--vscode-mobile-touch-target, 44px);
+}
+
+.monaco-workbench.mobile .testing-filter-action-item .testing-filter-wrapper input {
+	padding: 0 var(--vscode-mobile-horizontal-padding, 12px);
+	min-height: var(--vscode-mobile-touch-target, 44px);
+}
+
+.monaco-workbench.mobile .testing-no-test-placeholder {
+	padding: 0 var(--vscode-mobile-horizontal-padding, 12px);
+}
+
 /** -- decorations  */
 
 .monaco-editor .testing-run-glyph {
@@ -453,7 +492,8 @@
 		width: 15px;
 		left: -10px;
 		z-index: -1;
-		stroke-width: 0.71px; /* 1 / sqrt(2) */
+		stroke-width: 0.71px;
+		/* 1 / sqrt(2) */
 		stroke: var(--vscode-testing-message-error-badgeBorder);
 	}
 }

@@ -32,7 +32,7 @@
 	padding: 0px 0px 0px 0px;
 }
 
-.monaco-workbench .notebookOverlay .notebook-toolbar-container .monaco-action-bar .action-item  .kernel-label {
+.monaco-workbench .notebookOverlay .notebook-toolbar-container .monaco-action-bar .action-item .kernel-label {
 	background-size: 16px;
 	padding: 0px 5px 0px 3px;
 	border-radius: 5px;
@@ -99,4 +99,22 @@
 
 .monaco-workbench .notebookOverlay .notebook-toolbar-container .monaco-action-bar .action-item .codicon-notebook-state-error {
 	color: var(--vscode-notebookStatusErrorIcon-foreground);
+}
+
+/** Mobile */
+.monaco-workbench.mobile .notebookOverlay .notebook-toolbar-container {
+	display: flex;
+	gap: var(--vscode-mobile-section-gap, 12px);
+	padding: 0 var(--vscode-mobile-horizontal-padding, 12px);
+	margin-top: var(--vscode-mobile-section-gap, 12px);
+	margin-bottom: var(--vscode-mobile-section-gap, 12px);
+}
+
+.monaco-workbench.mobile .notebookOverlay .notebook-toolbar-container .monaco-action-bar .action-item {
+	height: var(--vscode-mobile-touch-target, 44px);
+	margin-right: var(--vscode-mobile-section-gap, 12px);
+}
+
+.monaco-workbench.mobile .notebookOverlay .notebook-toolbar-container .monaco-action-bar .action-item .action-label {
+	padding: 0 12px;
 }

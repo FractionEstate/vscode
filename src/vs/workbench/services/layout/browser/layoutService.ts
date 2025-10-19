@@ -145,6 +145,11 @@ export interface IWorkbenchLayoutService extends ILayoutService {
 	readonly onDidChangeZenMode: Event<boolean>;
 
 	/**
+	 * Emits when the responsive mobile layout mode changes.
+	 */
+	readonly onDidChangeMobileLayoutMode: Event<boolean>;
+
+	/**
 	 * Emits when the target window is maximized or unmaximized.
 	 */
 	readonly onDidChangeWindowMaximized: Event<{ readonly windowId: number; readonly maximized: boolean }>;
@@ -353,6 +358,11 @@ export interface IWorkbenchLayoutService extends ILayoutService {
 	 * Returns the next visible view part in a given direction in the main window.
 	 */
 	getVisibleNeighborPart(part: Parts, direction: Direction): Parts | undefined;
+
+	/**
+	 * Returns whether the compact mobile layout mode is active.
+	 */
+	isMobileLayoutActive(): boolean;
 }
 
 export function shouldShowCustomTitleBar(configurationService: IConfigurationService, window: Window, menuBarToggled?: boolean): boolean {

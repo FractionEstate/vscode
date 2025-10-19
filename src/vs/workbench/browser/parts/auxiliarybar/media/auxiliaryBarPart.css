@@ -40,7 +40,8 @@
 
 .monaco-workbench .part.auxiliarybar > .title > .composite-bar-container > .composite-bar > .monaco-action-bar .action-item:focus,
 .monaco-workbench .part.auxiliarybar > .header-or-footer > .composite-bar-container > .composite-bar > .monaco-action-bar .action-item:focus {
-	outline: 0 !important; /* activity bar indicates focus custom */
+	outline: 0 !important;
+	/* activity bar indicates focus custom */
 }
 
 .monaco-workbench .part.auxiliarybar > .title > .composite-bar-container > .composite-bar > .monaco-action-bar .action-item .action-label,
@@ -52,7 +53,8 @@
 .monaco-workbench .part.auxiliarybar > .title > .composite-bar-container > .composite-bar > .monaco-action-bar .action-item .action-label::before,
 .monaco-workbench .part.auxiliarybar > .header-or-footer > .composite-bar-container > .composite-bar > .monaco-action-bar .action-item .action-label::before {
 	position: absolute;
-	left: 5px; /* place icon in center */
+	left: 5px;
+	/* place icon in center */
 }
 
 .monaco-workbench .part.auxiliarybar > .title > .composite-bar-container > .composite-bar > .monaco-action-bar .action-item.checked:not(:focus) .active-item-indicator:before,
@@ -93,4 +95,23 @@
 
 .monaco-workbench .auxiliarybar.pane-composite-part > .title.has-composite-bar > .title-actions .monaco-action-bar .action-item {
 	max-width: 150px;
+}
+
+.monaco-workbench.mobile .part.auxiliarybar {
+	width: 100% !important;
+	max-width: none;
+	max-height: 45vh;
+	overflow: auto;
+	border-top: 1px solid var(--vscode-sideBar-border, transparent);
+	padding-bottom: var(--vscode-mobile-safe-area-bottom, 0px);
+}
+
+.monaco-workbench.mobile .part.auxiliarybar > .title {
+	height: 32px;
+	padding-left: var(--vscode-mobile-horizontal-padding, 8px);
+	padding-right: var(--vscode-mobile-horizontal-padding, 8px);
+}
+
+.monaco-workbench.mobile .part.auxiliarybar .title-actions .action-item {
+	margin-right: 2px;
 }

@@ -12,3 +12,18 @@
 .monaco-workbench > .notifications-center > .notifications-center-header > .notifications-center-header-toolbar .action-item:first-child {
 	margin-left: 4px;
 }
+
+.monaco-workbench.mobile .notifications-list-container .notification-list-item .notification-list-item-toolbar-container .action-item,
+.monaco-workbench.mobile > .notifications-center > .notifications-center-header > .notifications-center-header-toolbar .action-item {
+	margin: 0;
+}
+
+.monaco-workbench.mobile .notifications-list-container .notification-list-item .notification-list-item-toolbar-container .action-item .action-label,
+.monaco-workbench.mobile > .notifications-center > .notifications-center-header > .notifications-center-header-toolbar .action-item .action-label {
+	width: var(--vscode-mobile-touch-target, 44px);
+	height: var(--vscode-mobile-touch-target, 44px);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 8px;
+}

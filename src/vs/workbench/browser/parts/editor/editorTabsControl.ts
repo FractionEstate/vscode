@@ -47,6 +47,7 @@ import { IBaseActionViewItemOptions } from '../../../../base/browser/ui/actionba
 import { MarkdownString } from '../../../../base/common/htmlContent.js';
 import { IManagedHoverTooltipMarkdownString } from '../../../../base/browser/ui/hover/hover.js';
 import { applyDragImage } from '../../../../base/browser/ui/dnd/dnd.js';
+import { IWorkbenchLayoutService } from '../../../services/layout/browser/layoutService.js';
 
 export class EditorCommandsContextActionRunner extends ActionRunner {
 
@@ -101,7 +102,8 @@ export abstract class EditorTabsControl extends Themable implements IEditorTabsC
 
 	private static readonly EDITOR_TAB_HEIGHT = {
 		normal: 35 as const,
-		compact: 22 as const
+		compact: 22 as const,
+		mobile: 44 as const
 	};
 
 	protected editorActionsToolbarContainer: HTMLElement | undefined;
@@ -140,10 +142,13 @@ export abstract class EditorTabsControl extends Themable implements IEditorTabsC
 		@IThemeService themeService: IThemeService,
 		@IEditorResolverService private readonly editorResolverService: IEditorResolverService,
 		@IHostService private readonly hostService: IHostService,
+		@IWorkbenchLayoutService private readonly layoutService: IWorkbenchLayoutService,
 	) {
 		super(themeService);
 
 		this.renderDropdownAsChildElement = false;
+
+		this._register(this.layoutService.onDidChangeMobileLayoutMode(() => this.updateTabHeight()));
 
 		const container = this.create(parent);
 
@@ -447,7 +452,15 @@ export abstract class EditorTabsControl extends Themable implements IEditorTabsC
 	}
 
 	protected get tabHeight() {
-		return this.groupsView.partOptions.tabHeight !== 'compact' ? EditorTabsControl.EDITOR_TAB_HEIGHT.normal : EditorTabsControl.EDITOR_TAB_HEIGHT.compact;
+		const configuredHeight = this.groupsView.partOptions.tabHeight !== 'compact'
+			? EditorTabsControl.EDITOR_TAB_HEIGHT.normal
+			: EditorTabsControl.EDITOR_TAB_HEIGHT.compact;
+
+		if (this.layoutService.isMobileLayoutActive()) {
+			return Math.max(configuredHeight, EditorTabsControl.EDITOR_TAB_HEIGHT.mobile);
+		}
+
+		return configuredHeight;
 	}
 
 	protected getHoverTitle(editor: EditorInput): string | IManagedHoverTooltipMarkdownString {

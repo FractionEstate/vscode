@@ -7,7 +7,7 @@ import { Disposable, DisposableMap, DisposableStore, IDisposable, toDisposable }
 import { Event, Emitter } from '../../base/common/event.js';
 import { EventType, addDisposableListener, getClientArea, size, IDimension, isAncestorUsingFlowTo, computeScreenAwareSize, getActiveDocument, getWindows, getActiveWindow, isActiveDocument, getWindow, getWindowId, getActiveElement, Dimension } from '../../base/browser/dom.js';
 import { onDidChangeFullscreen, isFullscreen, isWCOEnabled } from '../../base/browser/browser.js';
-import { isWindows, isLinux, isMacintosh, isWeb, isIOS } from '../../base/common/platform.js';
+import { isWindows, isLinux, isMacintosh, isWeb, isIOS, isMobile } from '../../base/common/platform.js';
 import { EditorInputCapabilities, GroupIdentifier, isResourceEditorInput, IUntypedEditorInput, pathsToEditors } from '../common/editor.js';
 import { SidebarPart } from './parts/sidebar/sidebarPart.js';
 import { PanelPart } from './parts/panel/panelPart.js';
@@ -135,6 +135,10 @@ export const TITLE_BAR_SETTINGS = [
 const DEFAULT_EMPTY_WINDOW_DIMENSIONS = new Dimension(DEFAULT_EMPTY_WINDOW_SIZE.width, DEFAULT_EMPTY_WINDOW_SIZE.height);
 const DEFAULT_WORKSPACE_WINDOW_DIMENSIONS = new Dimension(DEFAULT_WORKSPACE_WINDOW_SIZE.width, DEFAULT_WORKSPACE_WINDOW_SIZE.height);
 
+// Enter compact layout when width is at or below this breakpoint and exit once above the disable threshold.
+const MOBILE_LAYOUT_ENABLE_MAX_WIDTH = 768;
+const MOBILE_LAYOUT_DISABLE_MIN_WIDTH = 900;
+
 export abstract class Layout extends Disposable implements IWorkbenchLayoutService {
 
 	declare readonly _serviceBrand: undefined;
@@ -143,6 +147,9 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 
 	private readonly _onDidChangeZenMode = this._register(new Emitter<boolean>());
 	readonly onDidChangeZenMode = this._onDidChangeZenMode.event;
+
+	private readonly _onDidChangeMobileLayoutMode = this._register(new Emitter<boolean>());
+	readonly onDidChangeMobileLayoutMode = this._onDidChangeMobileLayoutMode.event;
 
 	private readonly _onDidChangeMainEditorCenteredLayout = this._register(new Emitter<boolean>());
 	readonly onDidChangeMainEditorCenteredLayout = this._onDidChangeMainEditorCenteredLayout.event;
@@ -185,6 +192,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 	//#region Properties
 
 	readonly mainContainer = document.createElement('div');
+	private mobileLayoutActive = isMobile;
 	get activeContainer() { return this.getContainerFromDocument(getActiveDocument()); }
 	get containers(): Iterable<HTMLElement> {
 		const containers: HTMLElement[] = [];
@@ -301,6 +309,8 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		private readonly layoutOptions?: { resetLayout: boolean }
 	) {
 		super();
+
+		this.applyMobileClassToContainer(this.mainContainer);
 	}
 
 	protected initLayout(accessor: ServicesAccessor): void {
@@ -438,6 +448,8 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 
 			const eventDisposables = disposables.add(new DisposableStore());
 			this._onDidAddContainer.fire({ container: window.container, disposables: eventDisposables });
+			this.applyMobileClassToContainer(window.container);
+			window.whenStylesHaveLoaded.then(() => this.applyMobileClassToContainer(window.container));
 
 			disposables.add(window.onDidLayout(dimension => this.handleContainerDidLayout(window.container, dimension)));
 		}));
@@ -468,6 +480,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 
 	private handleContainerDidLayout(container: HTMLElement, dimension: IDimension): void {
 		if (container === this.mainContainer) {
+			this.updateMobileLayoutMode(dimension);
 			this._onDidLayoutMainContainer.fire(dimension);
 		}
 
@@ -476,6 +489,97 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		}
 
 		this._onDidLayoutContainer.fire({ container, dimension });
+	}
+
+	private applyMobileClassToContainer(container: HTMLElement): void {
+		container.classList.toggle('mobile', this.mobileLayoutActive);
+	}
+
+	isMobileLayoutActive(): boolean {
+		return this.mobileLayoutActive;
+	}
+
+	private shouldUseMobileLayout(dimension: IDimension | undefined): boolean {
+		if (isMobile) {
+			return true;
+		}
+
+		if (!dimension) {
+			return this.mobileLayoutActive;
+		}
+
+		if (this.mobileLayoutActive) {
+			return dimension.width < MOBILE_LAYOUT_DISABLE_MIN_WIDTH;
+		}
+
+		return dimension.width <= MOBILE_LAYOUT_ENABLE_MAX_WIDTH;
+	}
+
+	private updateMobileLayoutMode(dimension: IDimension | undefined): void {
+		const shouldEnable = this.shouldUseMobileLayout(dimension);
+		this.setMobileLayoutMode(shouldEnable, dimension);
+	}
+
+	private setMobileLayoutMode(enabled: boolean, dimension: IDimension | undefined): void {
+		if (enabled === this.mobileLayoutActive) {
+			return;
+		}
+
+		this.mobileLayoutActive = enabled;
+
+		for (const container of this.containers) {
+			container.classList.toggle('mobile', enabled);
+		}
+
+		this._onDidChangeMobileLayoutMode.fire(enabled);
+
+		if (!this.workbenchGrid) {
+			return;
+		}
+
+		const layoutDimension = dimension ?? this._mainContainerDimension;
+		if (layoutDimension) {
+			this._mainContainerDimension = layoutDimension;
+		}
+
+		this.rebuildWorkbenchGrid();
+
+		if (this._mainContainerDimension) {
+			this.workbenchGrid.layout(layoutDimension.width, layoutDimension.height);
+		}
+	}
+
+	private buildWorkbenchGrid(): SerializableGrid<ISerializableView> {
+		return SerializableGrid.deserialize(
+			this.createGridDescriptor(),
+			{ fromJSON: ({ type }: { type: Parts }) => this.getPart(type) },
+			{ proportionalLayout: false }
+		);
+	}
+
+	private attachWorkbenchGrid(newGrid: SerializableGrid<ISerializableView>, replaceExisting: boolean = false): void {
+		const previousGrid = this.workbenchGrid;
+		const previousBoundarySashes = previousGrid?.boundarySashes;
+
+		if (replaceExisting && previousGrid) {
+			const parent = previousGrid.element.parentElement ?? this.mainContainer;
+			parent.replaceChild(newGrid.element, previousGrid.element);
+			previousGrid.dispose();
+		} else {
+			this.mainContainer.prepend(newGrid.element);
+			this.mainContainer.setAttribute('role', 'application');
+		}
+
+		this.workbenchGrid = newGrid;
+		this.workbenchGrid.edgeSnapping = this.state.runtime.mainWindowFullscreen;
+		if (previousBoundarySashes) {
+			this.workbenchGrid.boundarySashes = previousBoundarySashes;
+		}
+	}
+
+	private rebuildWorkbenchGrid(): void {
+		const newGrid = this.buildWorkbenchGrid();
+		this.attachWorkbenchGrid(newGrid, true);
 	}
 
 	private onFullscreenChanged(windowId: number): void {
@@ -631,6 +735,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 
 	private initLayoutState(lifecycleService: ILifecycleService, fileService: IFileService): void {
 		this._mainContainerDimension = getClientArea(this.parent, this.contextService.getWorkbenchState() === WorkbenchState.EMPTY ? DEFAULT_EMPTY_WINDOW_DIMENSIONS : DEFAULT_WORKSPACE_WINDOW_DIMENSIONS); // running with fallback to ensure no error is thrown (https://github.com/microsoft/vscode/issues/240242)
+		this.updateMobileLayoutMode(this._mainContainerDimension);
 
 		this.stateModel = new LayoutStateModel(this.storageService, this.configurationService, this.contextService, this.environmentService);
 		this.stateModel.load({
@@ -1546,28 +1651,8 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		this.auxiliaryBarPartView = auxiliaryBarPart;
 		this.statusBarPartView = statusBar;
 
-		const viewMap = {
-			[Parts.ACTIVITYBAR_PART]: this.activityBarPartView,
-			[Parts.BANNER_PART]: this.bannerPartView,
-			[Parts.TITLEBAR_PART]: this.titleBarPartView,
-			[Parts.EDITOR_PART]: this.editorPartView,
-			[Parts.PANEL_PART]: this.panelPartView,
-			[Parts.SIDEBAR_PART]: this.sideBarPartView,
-			[Parts.STATUSBAR_PART]: this.statusBarPartView,
-			[Parts.AUXILIARYBAR_PART]: this.auxiliaryBarPartView
-		};
-
-		const fromJSON = ({ type }: { type: Parts }) => viewMap[type];
-		const workbenchGrid = SerializableGrid.deserialize(
-			this.createGridDescriptor(),
-			{ fromJSON },
-			{ proportionalLayout: false }
-		);
-
-		this.mainContainer.prepend(workbenchGrid.element);
-		this.mainContainer.setAttribute('role', 'application');
-		this.workbenchGrid = workbenchGrid;
-		this.workbenchGrid.edgeSnapping = this.state.runtime.mainWindowFullscreen;
+		const workbenchGrid = this.buildWorkbenchGrid();
+		this.attachWorkbenchGrid(workbenchGrid);
 
 		for (const part of [titleBar, editorPart, activityBar, panelPart, sideBar, statusBar, auxiliaryBarPart, bannerPart]) {
 			this._register(part.onDidVisibilityChange(visible => {
@@ -2430,7 +2515,11 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		};
 	}
 
-	private arrangeMiddleSectionNodes(nodes: { editor: ISerializedNode; panel: ISerializedNode; activityBar: ISerializedNode; sideBar: ISerializedNode; auxiliaryBar: ISerializedNode }, availableWidth: number, availableHeight: number): ISerializedNode[] {
+	private arrangeMiddleSectionNodes(nodes: { editor: ISerializedNode; panel: ISerializedNode; activityBar: ISerializedNode; statusBar: ISerializedNode; sideBar: ISerializedNode; auxiliaryBar: ISerializedNode }, availableWidth: number, availableHeight: number): ISerializedNode[] {
+		if (this.mobileLayoutActive) {
+			return this.arrangeMiddleSectionNodesForMobile(nodes, availableWidth, availableHeight);
+		}
+
 		const activityBarSize = this.stateModel.getRuntimeValue(LayoutStateKeys.ACTIVITYBAR_HIDDEN) ? 0 : nodes.activityBar.size;
 		const sideBarSize = this.stateModel.getRuntimeValue(LayoutStateKeys.SIDEBAR_HIDDEN) ? 0 : nodes.sideBar.size;
 		const auxiliaryBarSize = this.stateModel.getRuntimeValue(LayoutStateKeys.AUXILIARYBAR_HIDDEN) ? 0 : nodes.auxiliaryBar.size;
@@ -2505,6 +2594,73 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		return result;
 	}
 
+	private arrangeMiddleSectionNodesForMobile(nodes: { editor: ISerializedNode; panel: ISerializedNode; activityBar: ISerializedNode; statusBar: ISerializedNode; sideBar: ISerializedNode; auxiliaryBar: ISerializedNode }, availableWidth: number, availableHeight: number): ISerializedNode[] {
+		const activityBarVisible = nodes.activityBar.visible !== false;
+		const panelVisible = nodes.panel.visible !== false;
+		const sideBarVisible = nodes.sideBar.visible !== false;
+		const auxiliaryBarVisible = nodes.auxiliaryBar.visible !== false;
+		const statusBarVisible = nodes.statusBar.visible !== false;
+
+		const minActivityBarSize = Math.max(this.activityBarPartView.minimumHeight ?? 0, 56);
+		const panelSize = panelVisible ? nodes.panel.size : 0;
+		const sideBarSize = sideBarVisible ? nodes.sideBar.size : 0;
+		const auxiliaryBarSize = auxiliaryBarVisible ? nodes.auxiliaryBar.size : 0;
+		const statusBarSize = statusBarVisible ? nodes.statusBar.size : 0;
+		const reservedHeight = panelSize + sideBarSize + auxiliaryBarSize + statusBarSize + (activityBarVisible ? minActivityBarSize : 0);
+
+		const minEditorHeight = this.editorPartView.minimumHeight ?? 0;
+		nodes.editor.size = Math.max(availableHeight - reservedHeight, minEditorHeight);
+
+		if (activityBarVisible) {
+			nodes.activityBar.size = minActivityBarSize;
+		}
+
+		if (statusBarVisible) {
+			nodes.statusBar.size = statusBarSize;
+		}
+
+		if (panelVisible) {
+			nodes.panel.size = panelSize;
+		}
+
+		if (sideBarVisible) {
+			nodes.sideBar.size = sideBarSize;
+		}
+
+		if (auxiliaryBarVisible) {
+			nodes.auxiliaryBar.size = auxiliaryBarSize;
+		}
+
+		const stack: ISerializedNode[] = [nodes.editor];
+
+		if (panelVisible) {
+			stack.push(nodes.panel);
+		}
+
+		if (sideBarVisible) {
+			stack.push(nodes.sideBar);
+		}
+
+		if (auxiliaryBarVisible) {
+			stack.push(nodes.auxiliaryBar);
+		}
+
+		if (statusBarVisible) {
+			stack.push(nodes.statusBar);
+		}
+
+		if (activityBarVisible) {
+			stack.push(nodes.activityBar);
+		}
+
+		return [{
+			type: 'branch',
+			data: stack,
+			size: availableWidth,
+			visible: stack.some(node => node.visible !== false)
+		}];
+	}
+
 	private createGridDescriptor(): ISerializedGrid {
 		const { width, height } = this._mainContainerDimension!;
 		const sideBarSize = this.stateModel.getInitializationValue(LayoutStateKeys.SIDEBAR_SIZE);
@@ -2515,7 +2671,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		const bannerHeight = this.bannerPartView.minimumHeight;
 		const statusBarHeight = this.statusBarPartView.minimumHeight;
 		const activityBarWidth = this.activityBarPartView.minimumWidth;
-		const middleSectionHeight = height - titleBarHeight - statusBarHeight;
+		const middleSectionHeight = height - titleBarHeight - (this.mobileLayoutActive ? 0 : statusBarHeight);
 
 		const titleAndBanner: ISerializedNode[] = [
 			{
@@ -2567,32 +2723,41 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 			visible: !this.stateModel.getRuntimeValue(LayoutStateKeys.PANEL_HIDDEN)
 		};
 
+		const statusBarNode: ISerializedLeafNode = {
+			type: 'leaf',
+			data: { type: Parts.STATUSBAR_PART },
+			size: statusBarHeight,
+			visible: !this.stateModel.getRuntimeValue(LayoutStateKeys.STATUSBAR_HIDDEN)
+		};
+
 		const middleSection: ISerializedNode[] = this.arrangeMiddleSectionNodes({
 			activityBar: activityBarNode,
 			auxiliaryBar: auxiliaryBarNode,
 			editor: editorNode,
 			panel: panelNode,
+			statusBar: statusBarNode,
 			sideBar: sideBarNode
 		}, width, middleSectionHeight);
+
+		const titleAndBannerNodes = this.shouldShowBannerFirst() ? [...titleAndBanner].reverse() : titleAndBanner;
+		const rootChildren: ISerializedNode[] = [
+			...titleAndBannerNodes,
+			{
+				type: 'branch',
+				data: middleSection,
+				size: middleSectionHeight
+			}
+		];
+
+		if (!this.mobileLayoutActive) {
+			rootChildren.push(statusBarNode);
+		}
 
 		const result: ISerializedGrid = {
 			root: {
 				type: 'branch',
 				size: width,
-				data: [
-					...(this.shouldShowBannerFirst() ? titleAndBanner.reverse() : titleAndBanner),
-					{
-						type: 'branch',
-						data: middleSection,
-						size: middleSectionHeight
-					},
-					{
-						type: 'leaf',
-						data: { type: Parts.STATUSBAR_PART },
-						size: statusBarHeight,
-						visible: !this.stateModel.getRuntimeValue(LayoutStateKeys.STATUSBAR_HIDDEN)
-					}
-				]
+				data: rootChildren
 			},
 			orientation: Orientation.VERTICAL,
 			width,

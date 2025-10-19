@@ -55,7 +55,39 @@
 .monaco-workbench .notebookOverlay.cell-toolbar-click > .cell-list-container > .monaco-list > .monaco-scrollable-element > .monaco-list-rows > .monaco-list-row .cell-title-toolbar {
 	visibility: hidden;
 }
+
 .monaco-workbench .notebookOverlay.cell-toolbar-click > .cell-list-container > .monaco-list > .monaco-scrollable-element > .monaco-list-rows > .monaco-list-row.focused .cell-title-toolbar {
 	opacity: 1;
+	visibility: visible;
+}
+
+/** Mobile */
+.monaco-workbench.mobile .notebookOverlay > .cell-list-container > .monaco-list > .monaco-scrollable-element > .monaco-list-rows > .monaco-list-row .cell-title-toolbar {
+	position: static;
+	top: auto;
+	opacity: 1;
+	visibility: visible;
+	min-height: var(--vscode-mobile-touch-target, 44px);
+	margin-bottom: var(--vscode-mobile-section-gap, 12px);
+	width: 100%;
+	box-sizing: border-box;
+	padding: 0;
+	display: flex;
+	align-items: center;
+	gap: var(--vscode-mobile-section-gap, 12px);
+}
+
+.monaco-workbench.mobile .notebookOverlay > .cell-list-container > .monaco-list > .monaco-scrollable-element > .monaco-list-rows > .monaco-list-row .cell-title-toolbar .action-item.menu-entry {
+	width: var(--vscode-mobile-touch-target, 44px);
+	height: var(--vscode-mobile-touch-target, 44px);
+	margin: 0;
+}
+
+.monaco-workbench.mobile .notebookOverlay > .cell-list-container > .monaco-list > .monaco-scrollable-element > .monaco-list-rows > .monaco-list-row .cell-title-toolbar .action-item .action-label {
+	height: var(--vscode-mobile-touch-target, 44px);
+	padding: 0 12px;
+}
+
+.monaco-workbench.mobile .notebookOverlay.cell-toolbar-click > .cell-list-container > .monaco-list > .monaco-scrollable-element > .monaco-list-rows > .monaco-list-row .cell-title-toolbar {
 	visibility: visible;
 }

@@ -802,12 +802,25 @@ export class QuickInputController extends Disposable {
 	private updateLayout() {
 		if (this.ui && this.isVisible()) {
 			const style = this.ui.container.style;
-			const width = Math.min(this.dimension!.width * 0.62 /* golden cut */, QuickInputController.MAX_WIDTH);
+			const isMobile = this.layoutService.activeContainer.classList.contains('mobile');
+			this.ui.container.classList.toggle('mobile', isMobile);
+			const availableWidth = this.dimension!.width;
+			const width = isMobile
+				? Math.min(Math.max(availableWidth - 24, Math.min(availableWidth, 280)), QuickInputController.MAX_WIDTH)
+				: Math.min(availableWidth * 0.62 /* golden cut */, QuickInputController.MAX_WIDTH);
 			style.width = width + 'px';
 
 			// Position
-			style.top = `${this.viewState?.top ? Math.round(this.dimension!.height * this.viewState.top) : this.titleBarOffset}px`;
-			style.left = `${Math.round((this.dimension!.width * (this.viewState?.left ?? 0.5 /* center */)) - (width / 2))}px`;
+			if (isMobile) {
+				style.left = '50%';
+				style.transform = 'translateX(-50%)';
+				const mobileTopOffset = (this.titleBarOffset ?? 0) + 8;
+				style.top = `calc(${mobileTopOffset}px + var(--vscode-mobile-safe-area-top, 0px))`;
+			} else {
+				style.transform = '';
+				style.top = `${this.viewState?.top ? Math.round(this.dimension!.height * this.viewState.top) : (this.titleBarOffset ?? 0)}px`;
+				style.left = `${Math.round((availableWidth * (this.viewState?.left ?? 0.5 /* center */)) - (width / 2))}px`;
+			}
 
 			this.ui.inputBox.layout();
 			this.ui.list.layout(this.dimension && this.dimension.height * 0.4);

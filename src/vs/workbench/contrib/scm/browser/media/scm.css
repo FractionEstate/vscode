@@ -78,15 +78,15 @@
 	min-width: 20px;
 }
 
-.scm-view .scm-provider > .actions > .monaco-toolbar > .monaco-action-bar > .actions-container  > .action-item > .action-label,
-.scm-view .scm-provider > .actions > .monaco-toolbar > .monaco-action-bar > .actions-container  > .action-item > .monaco-dropdown > .dropdown-label > .action-label {
+.scm-view .scm-provider > .actions > .monaco-toolbar > .monaco-action-bar > .actions-container > .action-item > .action-label,
+.scm-view .scm-provider > .actions > .monaco-toolbar > .monaco-action-bar > .actions-container > .action-item > .monaco-dropdown > .dropdown-label > .action-label {
 	display: flex;
 	align-items: center;
 	line-height: 16px;
 	overflow: hidden;
 }
 
-.scm-view .scm-provider > .actions > .monaco-toolbar > .monaco-action-bar > .actions-container  > .action-item > .action-label > .codicon {
+.scm-view .scm-provider > .actions > .monaco-toolbar > .monaco-action-bar > .actions-container > .action-item > .action-label > .codicon {
 	justify-content: center;
 }
 
@@ -365,7 +365,7 @@
 }
 
 .scm-view .button-container > .monaco-button-dropdown > .monaco-dropdown-button {
-	display:flex;
+	display: flex;
 	align-items: center;
 	padding: 0 4px;
 }
@@ -398,6 +398,46 @@
 .scm-view .scm-editor.validation-info {
 	outline: 1px solid var(--vscode-inputValidation-infoBorder) !important;
 	outline-offset: -1px;
+}
+
+.monaco-workbench.mobile .scm-view {
+	padding: var(--vscode-mobile-section-gap, 12px) var(--vscode-mobile-horizontal-padding, 12px);
+	gap: var(--vscode-mobile-section-gap, 12px);
+}
+
+.monaco-workbench.mobile .scm-view .scm-provider {
+	align-items: stretch;
+}
+
+.monaco-workbench.mobile .scm-view .monaco-list-row,
+.monaco-workbench.mobile .scm-view .monaco-list-row .monaco-icon-label-container {
+	height: var(--vscode-mobile-touch-target, 44px);
+	line-height: var(--vscode-mobile-touch-target, 44px);
+}
+
+.monaco-workbench.mobile .scm-view .monaco-list-row .history-item > .graph-container {
+	height: var(--vscode-mobile-touch-target, 44px);
+}
+
+.monaco-workbench.mobile .scm-view .monaco-list-row .history-item > .label-container {
+	margin-left: var(--vscode-mobile-section-gap, 12px);
+	gap: var(--vscode-mobile-section-gap, 12px);
+}
+
+.monaco-workbench.mobile .scm-view .scm-input {
+	padding-left: var(--vscode-mobile-horizontal-padding, 12px);
+	padding-right: var(--vscode-mobile-horizontal-padding, 12px);
+	align-items: flex-start;
+}
+
+.monaco-workbench.mobile .scm-view .scm-editor {
+	min-height: calc(var(--vscode-mobile-touch-target, 44px) * 2);
+	border-radius: var(--vscode-mobile-overlay-radius, 12px);
+}
+
+.monaco-workbench.mobile .scm-view .button-container {
+	padding-left: var(--vscode-mobile-horizontal-padding, 12px);
+	padding-right: var(--vscode-mobile-horizontal-padding, 12px);
 }
 
 .scm-view .scm-editor.validation-warning {
